@@ -1,0 +1,7 @@
+.inside-container {
+    width: 100%;
+    display: flex;
+    margin-top: 5pt;
+    margin-bottom: 5pt;
+    justify-content: center;
+}
