@@ -8,9 +8,11 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import com.mp_music.mp_music.model.InsertSongModel;
 import com.mp_music.mp_music.model.PlatformModel;
 import com.mp_music.mp_music.model.PublishModel;
 import com.mp_music.mp_music.model.SongModel;
+import com.mp_music.mp_music.repository.IPlatformRepository;
 import com.mp_music.mp_music.repository.ISongRepository;
 
 @Repository
@@ -18,6 +20,9 @@ public class SongRepository implements ISongRepository {
 
     @Autowired
     JdbcTemplate jdbc;
+
+    @Autowired
+    IPlatformRepository platformRepo;
 
     @Override
     public List<SongModel> readAll() {
@@ -27,27 +32,28 @@ public class SongRepository implements ISongRepository {
     }
 
     @Override
-    public String update(SongModel model, int id, String name, String artist, int year, String genre) {
+    public String update(InsertSongModel model, int id) {
 
-        var findSong = "SELECT * FROM songs WHERE id = ?";
+        // var findSong = "SELECT * FROM songs WHERE id = ?";
 
-        List<SongModel> song = jdbc.query(findSong, new BeanPropertyRowMapper<SongModel>(SongModel.class), id);
+        // List<SongModel> song = jdbc.query(findSong, new
+        // BeanPropertyRowMapper<SongModel>(SongModel.class), id);
 
-        if (name == "") {
-            name = song.get(0).getName();
+        var querySong = "UPDATE songs SET name = ?, artist = ?, year = ?, genre = ? WHERE id = ?";
+
+        jdbc.update(querySong, model.getName(), model.getArtist(), model.getYear(), model.getGenre(), id);
+
+        var queryPlatform = "DELETE FROM publish WHERE song_id = ?";
+
+        jdbc.update(queryPlatform, id);
+
+        for (String platform : model.getPlatforms()) {
+            int platformId = platformRepo.findPlatformId(platform);
+
+            var queryPublish = "INSERT INTO publish(song_id, platform_id) VALUES (?, ?)";
+
+            jdbc.update(queryPublish, new Object[] { id, platformId });
         }
-
-        if (artist == "") {
-            artist = song.get(0).getArtist();
-        }
-
-        if (genre == "") {
-            genre = song.get(0).getGenre();
-        }
-
-        var query = "UPDATE songs SET name = ?, artist = ?, year = ?, genre = ? WHERE id = ?";
-
-        jdbc.update(query, name, artist, year, genre, id);
 
         return "Update song successful.";
     }

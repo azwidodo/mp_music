@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.mp_music.mp_music.model.InsertSongModel;
 import com.mp_music.mp_music.model.ReadModel;
-import com.mp_music.mp_music.model.SongModel;
 import com.mp_music.mp_music.service.IPublishService;
 
 @RestController
@@ -26,18 +25,13 @@ public class PublishController {
         return publishServ.readAll();
     }
 
-    @GetMapping("/findPlatformId")
-    public int findPlatformId(@RequestParam String platformName) {
-        return publishServ.findPlatformId(platformName);
-    }
-
-    @PostMapping("/insert")
+    @PostMapping("/admin/insert")
     public String insert(@RequestBody InsertSongModel model) {
         return publishServ.insert(model);
     }
 
     @GetMapping("/readByPlatform")
-    public List<SongModel> readByPlatform(@RequestParam String platform) {
+    public List<ReadModel> readByPlatform(@RequestParam String platform) {
         return publishServ.readByPlatform(platform);
     }
 }

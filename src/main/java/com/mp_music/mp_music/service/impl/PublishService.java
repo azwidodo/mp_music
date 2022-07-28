@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 import com.mp_music.mp_music.model.InsertSongModel;
 import com.mp_music.mp_music.model.ReadModel;
-import com.mp_music.mp_music.model.SongModel;
 import com.mp_music.mp_music.repository.IPublishRepository;
 import com.mp_music.mp_music.service.IPublishService;
 
@@ -23,17 +22,12 @@ public class PublishService implements IPublishService {
     }
 
     @Override
-    public int findPlatformId(String platformName) {
-        return publishRepo.findPlatformId(platformName);
-    }
-
-    @Override
     public String insert(InsertSongModel model) {
         return publishRepo.insert(model);
     }
 
     @Override
-    public List<SongModel> readByPlatform(String platform) {
+    public List<ReadModel> readByPlatform(String platform) {
         return publishRepo.readByPlatform(platform);
     }
 

@@ -15,20 +15,43 @@ $(document).ready(function () {
     refresh();
 
     // delete
-    $(".delete-form").click(function () {
-        console.log("delet successful")
+    $("#delete-btn").submit("#delete-btn-form", function () {
+        $.ajax({
+            url: "/",
+            type: "GET",
+            success: function (result) {
+                alert("Delete successful")
+                refresh()
+            }
+        })
+        return false
     })
 
     // pop up add
     $("#new-song-btn").click(function () {
         $.ajax({
-            url: "/insert",
+            url: "/insertModal",
             type: "GET",
             dataType: "html",
             success: function (result) {
-                $('#add-mahasiswa').modal('show');
-                $('#add-mahasiswa').find('.modal-body').html(result);
+                $("#insert-song").modal("show");
+                $("#insert-song").find(".modal-body").html(result);
             }
         })
     });
+
+    // submit insert
+    $("#insert-song").submit("#insert-song-form", function () {
+        $.ajax({
+            url: "/insertSubmit",
+            type: "GET",
+            data: $(this).serialize(),
+            success: function (result) {
+                alert("New song added")
+                $("#insert-song").modal("hide");
+                refresh();
+            }
+        })
+        return false
+    })
 })

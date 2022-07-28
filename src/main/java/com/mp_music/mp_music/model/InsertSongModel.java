@@ -1,5 +1,7 @@
 package com.mp_music.mp_music.model;
 
+import java.util.List;
+
 import lombok.Data;
 
 @Data
@@ -14,5 +16,5 @@ public class InsertSongModel {
 
     private String genre;
 
-    private String[] platforms;
+    private List<String> platforms;
 }

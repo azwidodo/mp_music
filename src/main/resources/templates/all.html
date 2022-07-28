@@ -12,7 +12,7 @@
         </form>
     </td>
     <td>
-        <form class="delete-form" th:action="@{/api/deleteSong}" method="post">
+        <form id="delete-btn-form" class="delete-form" th:action="@{/api/deleteSong}" method="post">
             <input type="text" name="id" th:value="${data.id}" class="form-control">
             <button class="btn btn-danger" id="delete-btn">Delete</button>
         </form>
