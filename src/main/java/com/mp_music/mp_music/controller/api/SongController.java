@@ -37,6 +37,6 @@ public class SongController {
     public String delete(@RequestParam int id, HttpServletResponse response) throws Exception {
         songServ.delete(id);
         response.sendRedirect("/");
-        return "/delete_modal";
+        return "";
     }
 }

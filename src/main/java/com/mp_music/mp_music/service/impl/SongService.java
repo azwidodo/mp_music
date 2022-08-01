@@ -21,6 +21,10 @@ public class SongService implements ISongService {
         return songRepo.readAll();
     }
 
+    public SongModel readById(int id) {
+        return songRepo.readById(id);
+    }
+
     @Override
     public String update(InsertSongModel model, int id) {
         return songRepo.update(model, id);

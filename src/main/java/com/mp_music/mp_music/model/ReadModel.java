@@ -19,12 +19,16 @@ public class ReadModel {
 
     private List<String> platforms;
 
-    public ReadModel(int id, String songName, String artist, int year, String genre, List<String> platforms) {
+    private String uniquePlatform;
+
+    public ReadModel(int id, String songName, String artist, int year, String genre, List<String> platforms,
+            String uniquePlatform) {
         this.id = id;
         this.songName = songName;
         this.artist = artist;
         this.year = year;
         this.genre = genre;
         this.platforms = platforms;
+        this.uniquePlatform = uniquePlatform;
     }
 }

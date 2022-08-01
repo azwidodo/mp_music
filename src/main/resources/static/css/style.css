@@ -1,7 +1,46 @@
+body {
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    background-color: #FFFCFF;
+}
 .inside-container {
     width: 100%;
     display: flex;
     margin: 10px 10px 10px 10px;
-        padding: 10px 10px 10px 10px;
+        padding: 5px 5px 5px 5px;
     justify-content: center;
+}
+table {
+    margin-right: 20px;
+    margin-left: 20px;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+input {
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+.form-check-label {
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+.platform-btn {
+    background-color: #FFFCFF;
+    border: 1px solid black;
+    border-radius: 6px;
+    box-sizing: border-box;
+    color: black;
+    display: inline-block;
+    /* line-height: 20px; */
+    margin: 2px;
+    outline: none;
+    padding: 3px 5px;
+    position: relative;
+    text-align: center;
+    text-decoration: none;
+    touch-action: manipulation;
+    width: auto;
+}
+
+.col-form-label {
+    color: #313336;
 }

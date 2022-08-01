@@ -38,14 +38,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/admin").hasRole("ADMIN")
+                .antMatchers("/admin/**").hasRole("ADMIN")
                 .antMatchers("/api/admin/**").hasRole("ADMIN")
+                .antMatchers("/user/**").hasAnyRole("USER", "ADMIN")
                 .antMatchers("/api/user/**").hasAnyRole("USER", "ADMIN")
                 .antMatchers("/authenticate", "/**").permitAll()
                 .anyRequest().authenticated()
-                .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-
-        http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+                .and().formLogin().loginPage("/login").permitAll()
+                .and().logout().permitAll()
+        // .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        // http.addFilterBefore(jwtRequestFilter,
+        // UsernamePasswordAuthenticationFilter.class);
+        ;
     }
 
     @Override

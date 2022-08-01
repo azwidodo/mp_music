@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -36,10 +39,41 @@ public class PublishRepository implements IPublishRepository {
         for (SongModel song : songs) {
             List<String> platforms = songRepo.findPlatforms(song.getId());
             allList.add(new ReadModel(song.getId(), song.getName(), song.getArtist(), song.getYear(), song.getGenre(),
-                    platforms));
+                    platforms, ""));
         }
 
         return allList;
+    }
+
+    @Override
+    public ReadModel readBySongId(int id) {
+        SongModel song = songRepo.readById(id);
+
+        List<String> platforms = songRepo.findPlatforms(song.getId());
+
+        ReadModel read = new ReadModel(song.getId(), song.getName(), song.getArtist(), song.getYear(), song.getGenre(),
+                platforms, "");
+
+        return read;
+    }
+
+    @Override
+    public Page<ReadModel> readAllPagination(Pageable page) {
+
+        var query = "SELECT * FROM songs ORDER BY id LIMIT " + page.getPageSize() + " OFFSET " + page.getOffset();
+
+        List<SongModel> songs = jdbc.query(query, new BeanPropertyRowMapper<SongModel>(SongModel.class));
+
+        List<ReadModel> allList = new ArrayList<>();
+
+        for (SongModel song : songs) {
+            List<String> platforms = songRepo.findPlatforms(song.getId());
+            allList.add(new ReadModel(song.getId(), song.getName(), song.getArtist(),
+                    song.getYear(), song.getGenre(),
+                    platforms, ""));
+        }
+
+        return new PageImpl<ReadModel>(allList, page, readAll().size());
     }
 
     @Override
@@ -70,20 +104,44 @@ public class PublishRepository implements IPublishRepository {
 
         var query = "SELECT s.id, s.name, s.artist, s.year, s.genre FROM songs s "
                 + "RIGHT JOIN publish p ON p.song_id = s.id "
-                + "WHERE p.platform_id = ?";
+                + "WHERE p.platform_id = ? "
+                + "ORDER BY s.id";
 
         List<SongModel> songs = jdbc.query(query, new BeanPropertyRowMapper<SongModel>(SongModel.class), platformId);
 
-        List<ReadModel> songsWithPlatforms = new ArrayList<>();
+        List<ReadModel> allList = new ArrayList<>();
 
         for (SongModel song : songs) {
             List<String> platforms = songRepo.findPlatforms(song.getId());
-            songsWithPlatforms
+            allList
                     .add(new ReadModel(song.getId(), song.getName(), song.getArtist(), song.getYear(), song.getGenre(),
-                            platforms));
+                            platforms, platform));
         }
 
-        return songsWithPlatforms;
+        return allList;
     }
 
+    @Override
+    public Page<ReadModel> readByPlatform(String platform, Pageable page) {
+        int platformId = platformRepo.findPlatformId(platform);
+
+        var query = "SELECT s.id, s.name, s.artist, s.year, s.genre FROM songs s "
+                + "RIGHT JOIN publish p ON p.song_id = s.id "
+                + "WHERE p.platform_id = ? "
+                + "ORDER BY s.id "
+                + "LIMIT " + page.getPageSize() + " OFFSET " + page.getOffset();
+
+        List<SongModel> songs = jdbc.query(query, new BeanPropertyRowMapper<SongModel>(SongModel.class), platformId);
+
+        List<ReadModel> allList = new ArrayList<>();
+
+        for (SongModel song : songs) {
+            List<String> platforms = songRepo.findPlatforms(song.getId());
+            allList
+                    .add(new ReadModel(song.getId(), song.getName(), song.getArtist(), song.getYear(), song.getGenre(),
+                            platforms, platform));
+        }
+
+        return new PageImpl<ReadModel>(allList, page, readAll().size());
+    }
 }

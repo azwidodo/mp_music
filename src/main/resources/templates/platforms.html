@@ -25,16 +25,16 @@
         <input type="submit" value="Sign Out" class="btn btn-secondary"/>
       </form>
     </div>
-     
+    
     <!-- ADD NEW SONG -->
     <div class="inside-container">
-            <button type="button" class="btn btn-info" id="new-song-btn" onclick="insertSong()">Add new song</button>
+        <button type="button" class="btn btn-info" id="new-song-btn" onclick="insertSong()">Add new song</button>
     </div>
     
     <!-- FILTER BY PLATFORM -->
     <div class="inside-container">
         <a type="button" class="btn btn-light" id="all-btn" th:href="@{/}">All</a>
-        <a type="button" class="btn btn-light" id="spotify-btn" onclick="showByPlatform('Spotify')" th:href="@{/readByPlatform?platform=Spotify}">Spotify</a>
+        <a type="button" class="btn btn-light" id="spotify-btn" th:href="@{/readByPlatform?platform=Spotify}">Spotify</a>
         <a type="button" class="btn btn-light" id="youtube-btn" th:href="@{/readByPlatform?platform=Youtube Music}">Youtube Music</a>
         <a type="button" class="btn btn-light" id="apple-btn" th:href="@{/readByPlatform?platform=Apple Music}">Apple Music</a>
         <a type="button" class="btn btn-light" id="deezer-btn" th:href="@{/readByPlatform?platform=Deezer}">Deezer</a>
@@ -74,17 +74,18 @@
                   
                 </td>
                 <td>
-                  <form id="update-btn-form" class="edit-form">
-                      <input type="hidden" name="id" th:value="${data.id}" class="form-control" id="update-btn-input">
-                      <a th:href="@{/readById(id=${data.id})}" class="btn btn-outline-info" id="update-btn" th:attr="onclick=|updateSong('${data.id}')|">Edit</a>
-                  </form>
-                </td>
-                <td>
-                  <!-- th:action="@{/api/admin/deleteSong}" -->
-                    <form id="delete-btn-form" class="delete-form" th:action="@{/api/admin/deleteSong}" method="post">
-                        <input type="hidden" name="id" th:value="${data.id}" class="form-control">
-                        <button class="btn btn-outline-danger" id="delete-btn" onclick="deleteSong()">Delete</button>
+                  <!-- th:action="@{/updateModal}" method="post" -->
+                    <form id="update-btn-form" class="edit-form">
+                        <input type="hidden" name="id" th:value="${data.id}" class="form-control" id="update-btn-input">
+                        <a th:href="@{/readById(id=${data.id})}" class="btn btn-outline-info" id="update-btn" th:attr="onclick=|updateSong('${data.id}')|">Edit</a>
                     </form>
+                  </td>
+                  <td>
+                    <!-- th:action="@{/api/admin/deleteSong}" -->
+                      <form id="delete-btn-form" class="delete-form" th:action="@{/api/admin/deleteSong}" method="post">
+                          <input type="hidden" name="id" th:value="${data.id}" class="form-control">
+                          <button class="btn btn-outline-danger" id="delete-btn" onclick="deleteSong()">Delete</button>
+                      </form>
                 </td>
             </tr>
             </tbody>
@@ -92,19 +93,19 @@
     </div>
     
     <!-- NAVIGATION LINKS AT BOTTOM OF TABLE -->
-    <div class="inside-container page-numbers">
+    <!-- <div class="inside-container page-numbers">
       <hr/>
       <ul class="nav nav-pills">
         <li class="nav-item" th:each="i : ${#numbers.sequence(1, songs.totalPages)}">
-          <a th:href="@{/(page=${i-1})}" th:text="${i}" class="nav-link" 
+          <a th:href="@{/readByPlatform?{platform}&amp;{page}(platform=${songs[0].uniquePlatform},page=${i-1})}" th:text="${i}" class="nav-link" 
           th:classappend="${currentPage}==${i-1}?'active':''"></a>
         </li>
       </ul>
-    </div>
+    </div> -->
     
     <!-- INSERT MODAL -->
     <div id="insert-song">
-      <form id="insert-song-form">
+      <form id="insert-song-form" method="post">
         <div id="modal" class="modal" tabindex="-1">
           <div class="modal-dialog">
             <div class="modal-content">

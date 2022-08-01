@@ -26,9 +26,16 @@ public class SongRepository implements ISongRepository {
 
     @Override
     public List<SongModel> readAll() {
-        var query = "SELECT * FROM songs";
+        var query = "SELECT * FROM songs ORDER BY id";
 
         return jdbc.query(query, new BeanPropertyRowMapper<SongModel>(SongModel.class));
+    }
+
+    @Override
+    public SongModel readById(int id) {
+        var query = "SELECT * FROM songs WHERE id = ?";
+
+        return jdbc.query(query, new BeanPropertyRowMapper<SongModel>(SongModel.class), id).get(0);
     }
 
     @Override
@@ -73,7 +80,7 @@ public class SongRepository implements ISongRepository {
     @Override
     public List<String> findPlatforms(int songId) {
 
-        var queryPublish = "SELECT * FROM publish WHERE song_id = ?";
+        var queryPublish = "SELECT * FROM publish WHERE song_id = ? ORDER BY platform_id";
 
         List<PublishModel> plat = jdbc.query(queryPublish, new BeanPropertyRowMapper<PublishModel>(PublishModel.class),
                 songId);

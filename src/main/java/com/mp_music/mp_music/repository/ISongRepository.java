@@ -9,6 +9,8 @@ public interface ISongRepository {
 
     public List<SongModel> readAll();
 
+    public SongModel readById(int id);
+
     public String update(InsertSongModel model, int id);
 
     public String delete(int id);
